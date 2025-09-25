@@ -1,3 +1,4 @@
+#include <iostream>
 #include "TFile.h"
 #include "TTree.h"
 #include "TCanvas.h"
@@ -5,79 +6,97 @@
 #include "TLegend.h"
 #include "TStyle.h"
 
-void plot_var() {
+using namespace std;
+
+void plot_var(int mode) {
+    cout << "mode = " << mode << endl;
+
+    if (mode == 0) {
+        cout << ">>> mode==0 branch entered <<<" << endl;
+    } else {
+        cout << ">>> mode!=0 branch entered <<<" << endl;
+    }
+
     // --------- User-defined variable name ---------
-    TString varName = "BDT_score";  // Variable to inspect
+    TString varName = "B_mass";  // Variable to inspect
 
     // --------- Automatically determined variable range ---------
-    Float_t var_min = 1e10;
-    Float_t var_max = -1e10;
+    double var_min = 1e10;
+    double var_max = -1e10;
+    
+    TFile *f_data = nullptr;
+    TFile *f_mc   = nullptr;
+    TFile *f_mc2  = nullptr;
+    TTree *tree_mc2 = nullptr;
+    TH1F *h_mc2 = nullptr;
 
     // Open ROOT files
-    //TFile *f_data = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/selection/root_files/sideband.root");
-    //TFile *f_mc   = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/selection/root_files/MC_PSI2S.root");
-    //TFile *f_mc2  = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/selection/root_files/MC_X3872.root");
-    TFile *f_data = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/TMVA/sideband_X3872_BDT_trainX4.root");
-    TFile *f_mc   = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/TMVA/MC_PSI2S_BDT_trainX4.root");
-    TFile *f_mc2  = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/TMVA/MC_X3872_BDT_trainX4.root");
+    if (mode == 0) {
+        f_data = TFile::Open("../selection/root_files/sideband.root");
+        f_mc   = TFile::Open("../selection/root_files/MC_PSI2S.root");
+        f_mc2  = TFile::Open("../selection/root_files/MC_X3872.root");
+    }
+    else if(mode==1){
+        f_data = TFile::Open("../selection/root_files/sideband.root");
+        f_mc   = TFile::Open("../selection/root_files/MC_PSI2S.root");
+    }
 
     TTree *tree_data = (TTree*)f_data->Get("tree");
     TTree *tree_mc   = (TTree*)f_mc->Get("tree");
-    TTree *tree_mc2  = (TTree*)f_mc2->Get("tree");
+    if(mode==0){
+        tree_mc2  = (TTree*)f_mc2->Get("tree");
+    }
+    
 
     Float_t var_value;
     tree_data->SetBranchAddress(varName, &var_value);
+    double min_data = tree_data->GetMinimum(varName);
+    double max_data = tree_data->GetMaximum(varName);
 
-    // Determine min/max from data
-    Long64_t nentries = tree_data->GetEntries();
-    for (Long64_t i = 0; i < nentries; ++i) {
-        tree_data->GetEntry(i);
-        if (!std::isnan(var_value) && !std::isinf(var_value)) {
-            if (var_value < var_min) var_min = var_value;
-            if (var_value > var_max) var_max = var_value;
-        }
-    }
-
-    // Also determine min/max from MC
     tree_mc->SetBranchAddress(varName, &var_value);
-    Long64_t nentries_mc = tree_mc->GetEntries();
-    for (Long64_t i = 0; i < nentries_mc; ++i) {
-        tree_mc->GetEntry(i);
-        if (!std::isnan(var_value) && !std::isinf(var_value)) {
-            if (var_value < var_min) var_min = var_value;
-            if (var_value > var_max) var_max = var_value;
-        }
+    double min_mc   = tree_mc->GetMinimum(varName);
+    double max_mc   = tree_mc->GetMaximum(varName);
+
+    double min_mc2,max_mc2;
+    if(mode==0){
+        tree_mc2->SetBranchAddress(varName, &var_value);
+        min_mc2   = tree_mc2->GetMinimum(varName);
+        max_mc2   = tree_mc2->GetMaximum(varName);
     }
 
-    // Also determine min/max from MC2
-    tree_mc2->SetBranchAddress(varName, &var_value);
-    Long64_t nentries_mc2 = tree_mc2->GetEntries();
-    for (Long64_t i = 0; i < nentries_mc2; ++i) {
-        tree_mc2->GetEntry(i);
-        if (!std::isnan(var_value) && !std::isinf(var_value)) {
-            if (var_value < var_min) var_min = var_value;
-            if (var_value > var_max) var_max = var_value;
-        }
+    if(mode==0){
+        var_min = std::min({min_data, min_mc, min_mc2});
+        var_max = std::max({max_data, max_mc, max_mc2});
     }
+    else{
+        var_min = std::min({min_data, min_mc});
+        var_max = std::max({max_data, max_mc});
+    }
+    
 
     int nBins = 100;
-    //Define the region by hand
-    var_min = -0.25;
-    var_max = 0.15;
-
     TH1F *h_data = new TH1F("h_data", varName, nBins, var_min, var_max);
     TH1F *h_mc   = new TH1F("h_mc",   varName, nBins, var_min, var_max);
-    TH1F *h_mc2  = new TH1F("h_mc2",  varName, nBins, var_min, var_max);
+    if(mode==0){
+        h_mc2  = new TH1F("h_mc2",  varName, nBins, var_min, var_max);
+    }
+   
 
     // Fill histograms
     tree_data->Draw(varName + ">>h_data", "", "goff");
     tree_mc->Draw(varName + ">>h_mc", "", "goff");
-    tree_mc2->Draw(varName + ">>h_mc2", "", "goff");
+    if(mode==0){
+        tree_mc2->Draw(varName + ">>h_mc2", "", "goff");
+    }
+    
 
     // Normalize histograms
     if (h_data->Integral() > 0) h_data->Scale(1.0 / h_data->Integral());
     if (h_mc->Integral() > 0)   h_mc->Scale(1.0 / h_mc->Integral());
-    if (h_mc2->Integral() > 0)  h_mc2->Scale(1.0 / h_mc2->Integral());
+    if(mode==0){
+        if (h_mc2->Integral() > 0)  h_mc2->Scale(1.0 / h_mc2->Integral());
+    }
+    
 
     // Set styles
     int brightAzure = TColor::GetColor(51, 153, 255);
@@ -92,12 +111,21 @@ void plot_var() {
     h_mc->SetFillStyle(1001);
 
     int lightBrightYellow = TColor::GetColor(255, 255, 0);  
-    h_mc2->SetLineColor(lightBrightYellow);
-    h_mc2->SetLineWidth(2);
-    h_mc2->SetFillColorAlpha(lightBrightYellow, 0.2);// semi-transparent yellow
-    h_mc2->SetFillStyle(1001);
-
-    float max_val = std::max({h_data->GetMaximum(), h_mc->GetMaximum(), h_mc2->GetMaximum()});
+    if(mode==0){
+        h_mc2->SetLineColor(lightBrightYellow);
+        h_mc2->SetLineWidth(2);
+        h_mc2->SetFillColorAlpha(lightBrightYellow, 0.2);// semi-transparent yellow
+        h_mc2->SetFillStyle(1001);
+    }
+    
+    float max_val;
+    if(mode==0){
+        max_val = std::max({h_data->GetMaximum(), h_mc->GetMaximum(), h_mc2->GetMaximum()});
+    }
+    else{
+        max_val = std::max({h_data->GetMaximum(), h_mc->GetMaximum()});
+    }
+    
     h_data->SetMaximum(max_val * 1.2);
 
     // Draw to canvas
@@ -106,22 +134,24 @@ void plot_var() {
     h_data->SetTitle("Comparison of " + varName + "; " + varName + "; Normalized Entries");
     h_data->Draw("hist");
     h_mc->Draw("hist same");
-    h_mc2->Draw("hist same");
-
-    // ---------- Vertical cut line at x = 0.2 on main plot by hand----------
-    double cut_x = 0.2;
-    TLine *cutLine_main = new TLine(cut_x, 0.0, cut_x, h_data->GetMaximum());
-    cutLine_main->SetLineColor(TColor::GetColor(34,139,34)); 
-    cutLine_main->SetLineStyle(2); // dashed
-    cutLine_main->SetLineWidth(2);
-    cutLine_main->Draw("same");
+    if(mode==0){
+        h_mc2->Draw("hist same");
+    }
 
     // Add legend
     TLegend *leg = new TLegend(0.65, 0.70, 0.88, 0.88);
     leg->AddEntry(h_data, "sideband", "lf");
-    leg->AddEntry(h_mc,   "#Psi(2S)",   "lf");
-    leg->AddEntry(h_mc2,  "X(3872)",  "lf");
+    if(mode==0){
+        leg->AddEntry(h_mc,   "#Psi(2S)",   "lf");
+    }
+    else if(mode==1){
+        leg->AddEntry(h_mc,   "B^{+}",   "lf");
+    }
+    if(mode==0){
+        leg->AddEntry(h_mc2,  "X(3872)",  "lf");
+    }
     leg->Draw();
 
-    c1->SaveAs("pre-cut/"+varName + "_compare.pdf");
+    gSystem->Exec("mkdir -p output_scan");
+    c1->SaveAs("output_scan/"+varName + "_dist.pdf");
 }

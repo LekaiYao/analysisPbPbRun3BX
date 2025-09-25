@@ -8,9 +8,9 @@
 
 using namespace std;
 
-void plot_@VARNAME@(int mode = 0) {
+void plot_B_chi2cl(int mode = 0) {
     // --------- User-defined variable name ---------
-    TString varName = "@VARNAME@";  // Variable to inspect
+    TString varName = "B_chi2cl";  // Variable to inspect
 
     // --------- Automatically determined variable range ---------
     double var_min = 1e10;

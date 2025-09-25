@@ -3,25 +3,16 @@
 # Exit if any command fails
 set -e
 
-# Check argument
-if [ $# -ne 1 ]; then
-    echo "Usage: $0 <mode>"
-    exit 1
-fi
-
-mode=$1  # int, like 0,1,2,3
-
 # Loop over each variable name in input.txt
 while read varname; do
-    echo "Processing variable: $varname with mode=$mode"
+    echo "Processing variable: $varname"
 
     # Create a new .C file by replacing the placeholder
     script_name="plot_${varname}.C"
     sed "s/@VARNAME@/$varname/g" plot_template.C > "$script_name"
 
     # Run the script using ROOT in batch mode
-    root -l -b -q "${script_name}(${mode})"
-
+    root -l -b -q "$script_name"
     rm "$script_name"
 
-done < input_B.txt
+done < input.txt

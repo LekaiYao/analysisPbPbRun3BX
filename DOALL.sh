@@ -9,7 +9,7 @@ flatten(){
 scan(){
     ##scan all variables
     pushd analysis/scan
-    bash scan.sh &
+    bash scan.sh 0 &
     wait
     popd
 }
@@ -61,9 +61,11 @@ yield(){
 #(Run by THIS ORDER!)
 
 #flatten
+
 #scan
 #correlation
-selection
+#selection
 #optimization
 #BDT
+
 #yield
