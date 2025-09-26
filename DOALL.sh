@@ -42,10 +42,11 @@ optimization(){
 ##wait to be merged
 BDT(){
     ##BDT training and applying
+    #0(X),1(Bu),2(Bd),3(Bs)
     pushd analysis/TMVA
-    python3 -u new_TMVA_BDTs.py test1 > log/test1.log 2>&1 &
+    python3 -u TMVA_BDTs.py test1 0 &
     wait
-    python3 new_apply_BDT.py test1
+    python3 apply_BDT.py test1 0 &
     popd
 }
 

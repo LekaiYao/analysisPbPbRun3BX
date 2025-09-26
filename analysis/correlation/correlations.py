@@ -22,8 +22,8 @@ CHANNEL = sys.argv[2]
 tree_name = "tree"
 #X
 if (CHANNEL == "0") :
-    input_MCfile = "../selection/root_files/X/MC_X3872.root"
-    input_bkgfile = "../selection/root_files/X/sideband.root"
+    input_MCfile = "../selection/root_files/X/MC_X.root"
+    input_bkgfile = "../selection/root_files/X/sideband_X.root"
     CHANNEL = "X"
 #Bu
 elif (CHANNEL == "1") :
