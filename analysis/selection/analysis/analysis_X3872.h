@@ -1,8 +1,8 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Jul 31 16:37:11 2025 by ROOT version 6.30/04
+// Thu Sep 25 04:09:50 2025 by ROOT version 6.30/04
 // from TTree ntmix/
-// found on file: /lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root
+// found on file: /lstore/cms/hlegoinha/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root
 //////////////////////////////////////////////////////////
 
 #ifndef analysis_X3872_h
@@ -220,11 +220,11 @@ analysis_X3872::analysis_X3872(TTree *tree) : fChain(0)
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/lstore/cms/hlegoinha/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root");
+         f = new TFile("/lstore/cms/hlegoinha/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root");
       }
-      TDirectory * dir = (TDirectory*)f->Get("/lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root:/Bfinder");
+      TDirectory * dir = (TDirectory*)f->Get("/lstore/cms/hlegoinha/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root:/Bfinder");
       dir->GetObject("ntmix",tree);
 
    }

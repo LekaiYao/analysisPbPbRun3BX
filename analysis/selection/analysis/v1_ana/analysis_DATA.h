@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Sep 25 04:14:20 2025 by ROOT version 6.30/04
+// Thu Jul 31 16:37:39 2025 by ROOT version 6.30/04
 // from TTree ntmix/
 // found on file: /lstore/cms/hlegoinha/X3872/MC_DATA/DATA_ppRef_X3872.root
 //////////////////////////////////////////////////////////

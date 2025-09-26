@@ -1,4 +1,15 @@
-sideband PSI : [3.6,3.656] && [3.718,3.8]
-sideband X : [3.75,3.83] && [3.91,4.0]
-cut0: B_chi2cl > 0.003 && B_Qvalueuj < 0.2
-cut1: B_chi2cl > 0.005 && B_Qvalueuj < 0.2
+For X(3872) and Psi(2S):
+    sideband : [3.6,3.66] && [3.72,3.83] && [3.91,4.0]
+    MC X and PSI has a signal region cut([3.66,3.72],[3.83,3.91]), data doesn't
+    cut0: B_chi2cl > 0.003 && B_Qvalueuj < 0.2 && Bmass [3.6,4.0]
+    cut1: B_chi2cl > 0.005 && B_Qvalueuj < 0.2
+
+
+For B mesons:
+    sideband Bu : [5.0,5.2] && [5.4,6.0]
+    sideband Bs : [5.0,5.3] && [5.44,6.0]
+    pre-selection : Bnorm_svpvDistance>2
+
+    for now, MC doesn't have signal mass window
+
+    cut0: B_chi2cl > 0.003 && B_Qvalueuj < 0.2

@@ -5,28 +5,28 @@ flatten(){
     :
 }
 
-##wait to be merged
+##merge finished
 scan(){
     ##scan all variables
     pushd analysis/scan
-    bash scan.sh 0 &
+    bash scan.sh 3 & #0(X),1(Bu),2(Bd),3(Bs)
     wait
     popd
 }
 
-##wait to be merged
+##merge finished
 correlation(){
     ##draw correlation matrix
     pushd analysis/correlation
-    python3 correlations.py both
+    python3 correlations.py both 0 #0(X),1(Bu),2(Bd),3(Bs)
     popd
 }
 
-##wait to be merged
+##merge finished
 selection(){
     ##cut data and MC samples
     pushd analysis/selection
-    root -b -l -q select.C
+    python3 select.py 0 0 0 #model:0(sideband),1(cutDATA),2(cutMC);cut number:0,1,...;channel:0(X),1(Bu),2(Bd),3(Bs),4(PSI)
     popd
 }
 
@@ -62,7 +62,7 @@ yield(){
 
 #flatten
 
-#scan
+scan
 #correlation
 #selection
 #optimization

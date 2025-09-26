@@ -23,16 +23,23 @@ void plot_@VARNAME@(int mode = 0) {
     TH1F *h_mc2 = nullptr;
 
     // Open ROOT files
+    // 0(X),1(Bu),2(Bd),3(Bs)
     if (mode == 0) {
-        f_data = TFile::Open("../selection/root_files/sideband.root");
-        f_mc   = TFile::Open("../selection/root_files/MC_PSI2S.root");
-        f_mc2  = TFile::Open("../selection/root_files/MC_X3872.root");
+        f_data = TFile::Open("../selection/root_files/X/sideband.root");
+        f_mc   = TFile::Open("../selection/root_files/X/MC_PSI2S.root");
+        f_mc2  = TFile::Open("../selection/root_files/X/MC_X3872.root");
     }
     else if(mode==1){
-        //f_data = TFile::Open("../selection/root_files/sideband.root");
-        //f_mc   = TFile::Open("../selection/root_files/MC_PSI2S.root");
-        f_data = TFile::Open("/user/l/lekai/work/ppRef/analysis_B/selection/root_files/sideband_Bu.root");
-        f_mc   = TFile::Open("/user/l/lekai/work/ppRef/analysis_B/selection/root_files/MC_Bu.root");
+        f_data = TFile::Open("../selection/root_files/Bu/sideband_Bu.root");
+        f_mc   = TFile::Open("../selection/root_files/Bu/MC_Bu.root");
+    }
+    else if(mode==2){
+        f_data = TFile::Open("../selection/root_files/Bd/sideband_Bd.root");
+        f_mc   = TFile::Open("../selection/root_files/Bd/MC_Bd.root");
+    }
+    else if(mode==3){
+        f_data = TFile::Open("../selection/root_files/Bs/sideband_Bs.root");
+        f_mc   = TFile::Open("../selection/root_files/Bs/MC_Bs.root");
     }
 
     TTree *tree_data = (TTree*)f_data->Get("tree");
@@ -153,6 +160,12 @@ void plot_@VARNAME@(int mode = 0) {
     } else if(mode==1){
         gSystem->Exec("mkdir -p output_scan/Bu");
         c1->SaveAs("output_scan/Bu/"+varName + "_dist.pdf");
+    } else if(mode==2){
+        gSystem->Exec("mkdir -p output_scan/Bd");
+        c1->SaveAs("output_scan/Bd/"+varName + "_dist.pdf");
+    } else if(mode==3){
+        gSystem->Exec("mkdir -p output_scan/Bs");
+        c1->SaveAs("output_scan/Bs/"+varName + "_dist.pdf");
     }
     
 }

@@ -1,15 +1,14 @@
 void select() {
     // Open the input ROOT file
+    TFile *f_in = TFile::Open("root_files/DATA_XPSI.root");
     //X(3872)
-    //TFile *f_in = TFile::Open("root_files/DATA_XPSI.root");
     //TFile *f_in = TFile::Open("root_files/MC_X3872.root");
     //TFile *f_in = TFile::Open("root_files/sideband_X3872.root");
     //psi(2S)
-    //TFile *f_in = TFile::Open("root_files/DATA_XPSI.root");
     //TFile *f_in = TFile::Open("root_files/MC_PSI2S.root");
     //TFile *f_in = TFile::Open("root_files/sideband_PSI.root");
 
-    TFile *f_in = TFile::Open("root_files/sideband.root");
+    //TFile *f_in = TFile::Open("root_files/sideband.root");
     TTree *tree = (TTree*)f_in->Get("tree");
 
     // Get all branches
@@ -28,24 +27,24 @@ void select() {
         }
     }
 
-    // Check if B_mass exists
-    if (vars.find("B_mass") == vars.end()) {
-        Error("select", "Branch 'B_mass' not found or not of Float_t type!");
+    // Check if Bmass exists
+    if (vars.find("Bmass") == vars.end()) {
+        Error("select", "Branch 'Bmass' not found or not of Float_t type!");
         return;
     }
 
     // Create the output file and clone the structure
     //X(3872)
     //TFile *f_out = TFile::Open("root_files//DATA_XPSI_v2test1.root", "RECREATE");
-    //TFile *f_out = TFile::Open("root_files/MC_X3872_trainX1.root", "RECREATE");
+    //TFile *f_out = TFile::Open("MC_X3872.root", "RECREATE");
     //TFile *f_out = TFile::Open("root_files/sideband_X3872_v2test1.root", "RECREATE");
     //psi(2S)
     //TFile *f_out = TFile::Open("root_files/DATA_XPSI_cut0.root", "RECREATE");
-    //TFile *f_out = TFile::Open("root_files/MC_PSI2S_trainX1.root", "RECREATE");
+    //TFile *f_out = TFile::Open("MC_PSI2S.root", "RECREATE");
     //TFile *f_out = TFile::Open("root_files/sideband_PSI_v3test1.root", "RECREATE");
 
-    TFile *f_out = TFile::Open("root_files/sideband_cut0.root", "RECREATE");
-    //TFile *f_out = TFile::Open("root_files/sideband_trainX1.root", "RECREATE");
+    //TFile *f_out = TFile::Open("root_files/sideband.root", "RECREATE");
+    TFile *f_out = TFile::Open("root_files/DATA_cut0.root", "RECREATE");
 
     TTree *new_tree = tree->CloneTree(0);
 
@@ -56,21 +55,22 @@ void select() {
         tree->GetEntry(i);
         bool valid = true;
 
-        // B_mass window cut
+        // Bmass window cut
         //psi(2S)
-        //if (valid && (vars["B_mass"] > 3.66 && vars["B_mass"] < 3.72)) valid = false;
-        //if (valid && (vars["B_mass"] < 3.66 || vars["B_mass"] > 3.72)) valid = false;
+        //if (valid && (vars["Bmass"] > 3.66 && vars["Bmass"] < 3.72)) valid = false;
+        //if (valid && (vars["Bmass"] < 3.66 || vars["Bmass"] > 3.72)) valid = false;
         //X(3872)
-        //if (valid && (vars["B_mass"] > 3.83 && vars["B_mass"] < 3.91)) valid = false;//sideband
-        //if (valid && (vars["B_mass"] < 3.83 || vars["B_mass"] > 3.91)) valid = false;//signal
-        //if (valid && (vars["B_mass"] < 3.75 || vars["B_mass"] > 4.0)) valid = false;
-        if (valid && !((vars["B_mass"] > 3.6 && vars["B_mass"] < 3.66)
-        ||(vars["B_mass"] > 3.72 && vars["B_mass"] < 3.83)||(vars["B_mass"] > 3.91 && vars["B_mass"] < 4.0))) valid = false;
+        //if (valid && (vars["Bmass"] > 3.83 && vars["Bmass"] < 3.91)) valid = false;//sideband
+        //if (valid && (vars["Bmass"] < 3.83 || vars["Bmass"] > 3.91)) valid = false;//signal
+        
+        //if (valid && !((vars["Bmass"] > 3.6 && vars["Bmass"] < 3.66)
+        //||(vars["Bmass"] > 3.72 && vars["Bmass"] < 3.83)||(vars["Bmass"] > 3.91 && vars["Bmass"] < 4.0))) valid = false;//sideband
+        if (valid && (vars["Bmass"] < 3.6 || vars["Bmass"] > 4.0)) valid = false;
 
         // -----------------------
         // Apply pre-cuts (access variables directly by name)
-        if (valid && vars["B_chi2cl"] < 0.003) valid = false;
-        if (valid && vars["B_Qvalueuj"] > 0.2) valid = false;
+        if (valid && vars["Bchi2cl"] < 0.003) valid = false;
+        if (valid && vars["BQvalueuj"] > 0.2) valid = false;
         // -----------------------
 
         if (valid) {

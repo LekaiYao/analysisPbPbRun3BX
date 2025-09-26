@@ -1,12 +1,12 @@
 //////////////////////////////////////////////////////////
 // This class has been automatically generated on
-// Thu Sep 25 04:14:20 2025 by ROOT version 6.30/04
+// Thu Jul 31 16:37:11 2025 by ROOT version 6.30/04
 // from TTree ntmix/
-// found on file: /lstore/cms/hlegoinha/X3872/MC_DATA/DATA_ppRef_X3872.root
+// found on file: /lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root
 //////////////////////////////////////////////////////////
 
-#ifndef analysis_DATA_h
-#define analysis_DATA_h
+#ifndef analysis_X3872_h
+#define analysis_X3872_h
 
 #include <TROOT.h>
 #include <TChain.h>
@@ -14,7 +14,7 @@
 
 // Header file for the classes stored in the TTree if any.
 
-class analysis_DATA {
+class analysis_X3872 {
 public :
    TTree          *fChain;   //!pointer to the analyzed TTree or TChain
    Int_t           fCurrent; //!current Tree number in a TChain
@@ -36,80 +36,80 @@ public :
    Int_t           nChargedTracks;
    Int_t           nSelectedChargedTracks;
    Int_t           Bsize;
-   Int_t           Bindex[252];   //[Bsize]
-   Int_t           Btype[252];   //[Bsize]
-   Float_t         Bmass[252];   //[Bsize]
-   Float_t         Bpt[252];   //[Bsize]
-   Float_t         By[252];   //[Bsize]
-   Float_t         BvtxX[252];   //[Bsize]
-   Float_t         BvtxY[252];   //[Bsize]
-   Float_t         Bd0[252];   //[Bsize]
-   Float_t         Bd0Err[252];   //[Bsize]
-   Float_t         Bdxyz[252];   //[Bsize]
-   Float_t         BdxyzErr[252];   //[Bsize]
-   Float_t         Bchi2ndf[252];   //[Bsize]
-   Float_t         Bchi2cl[252];   //[Bsize]
-   Float_t         Bdtheta[252];   //[Bsize]
-   Float_t         Bcos_dtheta[252];   //[Bsize]
-   Float_t         Balpha[252];   //[Bsize]
-   Float_t         BsvpvDistance[252];   //[Bsize]
-   Float_t         BsvpvDisErr[252];   //[Bsize]
-   Float_t         BsvpvDistance_2D[252];   //[Bsize]
-   Float_t         BsvpvDisErr_2D[252];   //[Bsize]
-   Float_t         Bnorm_svpvDistance[252];   //[Bsize]
-   Float_t         Bnorm_svpvDistance_2D[252];   //[Bsize]
-   Float_t         BQvalue[252];   //[Bsize]
-   Float_t         BQvalueuj[252];   //[Bsize]
-   Float_t         BQvaluemumu[252];   //[Bsize]
-   Float_t         Btrk1Pt[252];   //[Bsize]
-   Float_t         Btrk2Pt[252];   //[Bsize]
-   Float_t         BtrkPtimb[252];   //[Bsize]
-   Float_t         Btrk1Eta[252];   //[Bsize]
-   Float_t         Btrk2Eta[252];   //[Bsize]
-   Float_t         Btrk1PtErr[252];   //[Bsize]
-   Float_t         Btrk2PtErr[252];   //[Bsize]
-   Float_t         Btrk1Dz[252];   //[Bsize]
-   Float_t         Btrk2Dz[252];   //[Bsize]
-   Float_t         Btrk1DzError[252];   //[Bsize]
-   Float_t         Btrk2DzError[252];   //[Bsize]
-   Float_t         Btrk1Dxy[252];   //[Bsize]
-   Float_t         Btrk2Dxy[252];   //[Bsize]
-   Float_t         Bnorm_trk1Dxy[252];   //[Bsize]
-   Float_t         Bnorm_trk2Dxy[252];   //[Bsize]
-   Float_t         Btrk1DxyError[252];   //[Bsize]
-   Float_t         Btrk2DxyError[252];   //[Bsize]
-   Float_t         Btrk1nPixelLayer[252];   //[Bsize]
-   Float_t         Btrk2nPixelLayer[252];   //[Bsize]
-   Float_t         Btrk1nStripLayer[252];   //[Bsize]
-   Float_t         Btrk2nStripLayer[252];   //[Bsize]
-   Float_t         Btrk1Chi2ndf[252];   //[Bsize]
-   Float_t         Btrk2Chi2ndf[252];   //[Bsize]
-   Bool_t          Btrk1highPurity[252];   //[Bsize]
-   Bool_t          Btrk2highPurity[252];   //[Bsize]
-   Float_t         Btrk1dR[252];   //[Bsize]
-   Float_t         Btrk2dR[252];   //[Bsize]
-   Float_t         Btktkmass[252];   //[Bsize]
-   Float_t         BtktkmassKK[252];   //[Bsize]
-   Float_t         BtktkvProb[252];   //[Bsize]
-   Float_t         Btktkpt[252];   //[Bsize]
-   Float_t         Bdoubletmass[252];   //[Bsize]
-   Float_t         Bmu1pt[252];   //[Bsize]
-   Float_t         Bmu2pt[252];   //[Bsize]
-   Bool_t          Bmu1highPurity[252];   //[Bsize]
-   Bool_t          Bmu2highPurity[252];   //[Bsize]
-   Bool_t          Bmu1isAcc[252];   //[Bsize]
-   Bool_t          Bmu2isAcc[252];   //[Bsize]
-   Bool_t          Bmu1SoftMuID[252];   //[Bsize]
-   Bool_t          Bmu2SoftMuID[252];   //[Bsize]
-   Bool_t          Bmu1HybridSoftMuID[252];   //[Bsize]
-   Bool_t          Bmu2HybridSoftMuID[252];   //[Bsize]
-   Bool_t          Bmu1isTriggered[252];   //[Bsize]
-   Bool_t          Bmu2isTriggered[252];   //[Bsize]
-   Float_t         Bmumumass[252];   //[Bsize]
-   Float_t         Bujmass[252];   //[Bsize]
-   Float_t         BujvProb[252];   //[Bsize]
-   Float_t         Bgen[252];   //[Bsize]
-   Int_t           BgenIndex[252];   //[Bsize]
+   Int_t           Bindex[288];   //[Bsize]
+   Int_t           Btype[288];   //[Bsize]
+   Float_t         Bmass[288];   //[Bsize]
+   Float_t         Bpt[288];   //[Bsize]
+   Float_t         By[288];   //[Bsize]
+   Float_t         BvtxX[288];   //[Bsize]
+   Float_t         BvtxY[288];   //[Bsize]
+   Float_t         Bd0[288];   //[Bsize]
+   Float_t         Bd0Err[288];   //[Bsize]
+   Float_t         Bdxyz[288];   //[Bsize]
+   Float_t         BdxyzErr[288];   //[Bsize]
+   Float_t         Bchi2ndf[288];   //[Bsize]
+   Float_t         Bchi2cl[288];   //[Bsize]
+   Float_t         Bdtheta[288];   //[Bsize]
+   Float_t         Bcos_dtheta[288];   //[Bsize]
+   Float_t         Balpha[288];   //[Bsize]
+   Float_t         BsvpvDistance[288];   //[Bsize]
+   Float_t         BsvpvDisErr[288];   //[Bsize]
+   Float_t         BsvpvDistance_2D[288];   //[Bsize]
+   Float_t         BsvpvDisErr_2D[288];   //[Bsize]
+   Float_t         Bnorm_svpvDistance[288];   //[Bsize]
+   Float_t         Bnorm_svpvDistance_2D[288];   //[Bsize]
+   Float_t         BQvalue[288];   //[Bsize]
+   Float_t         BQvalueuj[288];   //[Bsize]
+   Float_t         BQvaluemumu[288];   //[Bsize]
+   Float_t         Btrk1Pt[288];   //[Bsize]
+   Float_t         Btrk2Pt[288];   //[Bsize]
+   Float_t         BtrkPtimb[288];   //[Bsize]
+   Float_t         Btrk1Eta[288];   //[Bsize]
+   Float_t         Btrk2Eta[288];   //[Bsize]
+   Float_t         Btrk1PtErr[288];   //[Bsize]
+   Float_t         Btrk2PtErr[288];   //[Bsize]
+   Float_t         Btrk1Dz[288];   //[Bsize]
+   Float_t         Btrk2Dz[288];   //[Bsize]
+   Float_t         Btrk1DzError[288];   //[Bsize]
+   Float_t         Btrk2DzError[288];   //[Bsize]
+   Float_t         Btrk1Dxy[288];   //[Bsize]
+   Float_t         Btrk2Dxy[288];   //[Bsize]
+   Float_t         Bnorm_trk1Dxy[288];   //[Bsize]
+   Float_t         Bnorm_trk2Dxy[288];   //[Bsize]
+   Float_t         Btrk1DxyError[288];   //[Bsize]
+   Float_t         Btrk2DxyError[288];   //[Bsize]
+   Float_t         Btrk1nPixelLayer[288];   //[Bsize]
+   Float_t         Btrk2nPixelLayer[288];   //[Bsize]
+   Float_t         Btrk1nStripLayer[288];   //[Bsize]
+   Float_t         Btrk2nStripLayer[288];   //[Bsize]
+   Float_t         Btrk1Chi2ndf[288];   //[Bsize]
+   Float_t         Btrk2Chi2ndf[288];   //[Bsize]
+   Bool_t          Btrk1highPurity[288];   //[Bsize]
+   Bool_t          Btrk2highPurity[288];   //[Bsize]
+   Float_t         Btrk1dR[288];   //[Bsize]
+   Float_t         Btrk2dR[288];   //[Bsize]
+   Float_t         Btktkmass[288];   //[Bsize]
+   Float_t         BtktkmassKK[288];   //[Bsize]
+   Float_t         BtktkvProb[288];   //[Bsize]
+   Float_t         Btktkpt[288];   //[Bsize]
+   Float_t         Bdoubletmass[288];   //[Bsize]
+   Float_t         Bmu1pt[288];   //[Bsize]
+   Float_t         Bmu2pt[288];   //[Bsize]
+   Bool_t          Bmu1highPurity[288];   //[Bsize]
+   Bool_t          Bmu2highPurity[288];   //[Bsize]
+   Bool_t          Bmu1isAcc[288];   //[Bsize]
+   Bool_t          Bmu2isAcc[288];   //[Bsize]
+   Bool_t          Bmu1SoftMuID[288];   //[Bsize]
+   Bool_t          Bmu2SoftMuID[288];   //[Bsize]
+   Bool_t          Bmu1HybridSoftMuID[288];   //[Bsize]
+   Bool_t          Bmu2HybridSoftMuID[288];   //[Bsize]
+   Bool_t          Bmu1isTriggered[288];   //[Bsize]
+   Bool_t          Bmu2isTriggered[288];   //[Bsize]
+   Float_t         Bmumumass[288];   //[Bsize]
+   Float_t         Bujmass[288];   //[Bsize]
+   Float_t         BujvProb[288];   //[Bsize]
+   Float_t         Bgen[288];   //[Bsize]
+   Int_t           BgenIndex[288];   //[Bsize]
 
    // List of branches
    TBranch        *b_RunNo;   //!
@@ -201,8 +201,8 @@ public :
    TBranch        *b_Bgen;   //!
    TBranch        *b_BgenIndex;   //!
 
-   analysis_DATA(TTree *tree=0);
-   virtual ~analysis_DATA();
+   analysis_X3872(TTree *tree=0);
+   virtual ~analysis_X3872();
    virtual Int_t    Cut(Long64_t entry);
    virtual Int_t    GetEntry(Long64_t entry);
    virtual Long64_t LoadTree(Long64_t entry);
@@ -214,36 +214,36 @@ public :
 
 #endif
 
-#ifdef analysis_DATA_cxx
-analysis_DATA::analysis_DATA(TTree *tree) : fChain(0) 
+#ifdef analysis_X3872_cxx
+analysis_X3872::analysis_X3872(TTree *tree) : fChain(0) 
 {
 // if parameter tree is not specified (or zero), connect the file
 // used to generate this class and read the Tree.
    if (tree == 0) {
-      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/lstore/cms/hlegoinha/X3872/MC_DATA/DATA_ppRef_X3872.root");
+      TFile *f = (TFile*)gROOT->GetListOfFiles()->FindObject("/lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root");
       if (!f || !f->IsOpen()) {
-         f = new TFile("/lstore/cms/hlegoinha/X3872/MC_DATA/DATA_ppRef_X3872.root");
+         f = new TFile("/lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root");
       }
-      TDirectory * dir = (TDirectory*)f->Get("/lstore/cms/hlegoinha/X3872/MC_DATA/DATA_ppRef_X3872.root:/Bfinder");
+      TDirectory * dir = (TDirectory*)f->Get("/lstore/cms/henrique/X3872/MC_DATA/prompt_X3872_to_Jpsi_Rho_phat5_Bfinder.root:/Bfinder");
       dir->GetObject("ntmix",tree);
 
    }
    Init(tree);
 }
 
-analysis_DATA::~analysis_DATA()
+analysis_X3872::~analysis_X3872()
 {
    if (!fChain) return;
    delete fChain->GetCurrentFile();
 }
 
-Int_t analysis_DATA::GetEntry(Long64_t entry)
+Int_t analysis_X3872::GetEntry(Long64_t entry)
 {
 // Read contents of entry.
    if (!fChain) return 0;
    return fChain->GetEntry(entry);
 }
-Long64_t analysis_DATA::LoadTree(Long64_t entry)
+Long64_t analysis_X3872::LoadTree(Long64_t entry)
 {
 // Set the environment to read one entry
    if (!fChain) return -5;
@@ -256,7 +256,7 @@ Long64_t analysis_DATA::LoadTree(Long64_t entry)
    return centry;
 }
 
-void analysis_DATA::Init(TTree *tree)
+void analysis_X3872::Init(TTree *tree)
 {
    // The Init() function is called when the selector needs to initialize
    // a new tree or chain. Typically here the branch addresses and branch
@@ -363,7 +363,7 @@ void analysis_DATA::Init(TTree *tree)
    Notify();
 }
 
-Bool_t analysis_DATA::Notify()
+Bool_t analysis_X3872::Notify()
 {
    // The Notify() function is called when a new file is opened. This
    // can be either for a new TTree in a TChain or when when a new TTree
@@ -374,18 +374,18 @@ Bool_t analysis_DATA::Notify()
    return kTRUE;
 }
 
-void analysis_DATA::Show(Long64_t entry)
+void analysis_X3872::Show(Long64_t entry)
 {
 // Print contents of entry.
 // If entry is not specified, print current entry
    if (!fChain) return;
    fChain->Show(entry);
 }
-Int_t analysis_DATA::Cut(Long64_t entry)
+Int_t analysis_X3872::Cut(Long64_t entry)
 {
 // This function may be called from Loop.
 // returns  1 if entry is accepted.
 // returns -1 otherwise.
    return 1;
 }
-#endif // #ifdef analysis_DATA_cxx
+#endif // #ifdef analysis_X3872_cxx

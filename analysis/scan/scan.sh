@@ -9,7 +9,7 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-mode=$1  # int, like 0,1,2,3
+mode=$1  #0(X),1(Bu),2(Bd),3(Bs)
 
 # Loop over each variable name in input.txt
 while read varname; do
@@ -24,4 +24,4 @@ while read varname; do
 
     rm "$script_name"
 
-done < input_B.txt
+done < input.txt
