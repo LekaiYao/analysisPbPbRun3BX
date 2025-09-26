@@ -30,11 +30,11 @@ selection(){
     popd
 }
 
-##wait to be merged
+##merge finished
 optimization(){
     ##search for optimal cuts
     pushd analysis/optimization
-    bash new_Run.sh &
+    bash Run.sh 3 & #0(X+PSI),1(Bu),2(Bd),3(Bs),4(X)
     wait
     popd
 }
@@ -62,7 +62,7 @@ yield(){
 
 #flatten
 
-scan
+#scan
 #correlation
 #selection
 #optimization

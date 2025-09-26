@@ -25,9 +25,9 @@ void plot_@VARNAME@(int mode = 0) {
     // Open ROOT files
     // 0(X),1(Bu),2(Bd),3(Bs)
     if (mode == 0) {
-        f_data = TFile::Open("../selection/root_files/X/sideband.root");
+        f_data = TFile::Open("../selection/root_files/X/sideband_X.root");
         f_mc   = TFile::Open("../selection/root_files/X/MC_PSI2S.root");
-        f_mc2  = TFile::Open("../selection/root_files/X/MC_X3872.root");
+        f_mc2  = TFile::Open("../selection/root_files/X/MC_X.root");
     }
     else if(mode==1){
         f_data = TFile::Open("../selection/root_files/Bu/sideband_Bu.root");

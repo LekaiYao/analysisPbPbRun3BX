@@ -6,10 +6,11 @@ set -e
 # Check argument
 if [ $# -ne 1 ]; then
     echo "Usage: $0 <mode>"
+    echo "mode:0(X),1(Bu),2(Bd),3(Bs)"
     exit 1
 fi
 
-mode=$1  #0(X),1(Bu),2(Bd),3(Bs)
+mode=$1
 
 # Loop over each variable name in input.txt
 while read varname; do
