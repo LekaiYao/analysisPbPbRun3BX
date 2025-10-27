@@ -1,0 +1,278 @@
+#include "TFile.h"
+#include "TTree.h"
+#include "TCanvas.h"
+#include "TLegend.h"
+#include "TH2F.h"
+#include "RooAbsPdf.h"
+#include "RooExtendPdf.h"
+#include "RooGaussian.h"
+#include "RooExponential.h"
+#include "RooRealVar.h"
+#include "RooPlot.h"
+#include "RooDataSet.h"
+#include "RooAddPdf.h"
+#include "RooArgList.h"
+#include "RooFitResult.h"
+#include "RooArgSet.h"
+#include "RooFit.h"
+#include "RooStats/SPlot.h" 
+
+using namespace RooFit;
+using namespace RooStats;
+
+void fit_DATA_Bu_sw() {
+    TFile *f = TFile::Open("../selection/root_files/Bu/DATA_Bu_cut1.root");
+    TTree *tree = (TTree*)f->Get("tree");
+    
+    float lowBmass=5.18,highBmass=5.8;
+	//float lowDis=0,highDis=4;//1.92
+	float lowDis_2D=4.0,highDis_2D=1000.0;//1.92
+	//float lowBalpha=0.0,highBalpha=3.2;
+	//float lowBchi2cl=0.0,highBchi2cl=1.0;
+	float lowBQvalueuj=-0.6,highBQvalueuj=0.095;
+	float lowBtrk1dR=0.0,highBtrk1dR=1.25;
+	float lowBtrk2dR=0.0,highBtrk2dR=0.64;
+    Int_t N=300000;//N is the max of events
+	Int_t BinNum=62;
+    
+    //define variables
+    RooRealVar Bmass("Bmass", "Bmass", lowBmass, highBmass);
+	//RooRealVar Bnorm_svpvDistance("Bnorm_svpvDistance","Bnorm_svpvDistance",lowDis,highDis);
+	RooRealVar Bnorm_svpvDistance_2D("Bnorm_svpvDistance_2D","Bnorm_svpvDistance_2D",lowDis_2D,highDis_2D);
+	//RooRealVar Balpha("Balpha", "Balpha", lowBalpha, highBalpha);
+	//RooRealVar Bchi2cl("Bchi2cl","Bchi2cl",lowBchi2cl,highBchi2cl);
+	//RooRealVar BQvalueuj("BQvalueuj","BQvalueuj",lowBQvalueuj,highBQvalueuj);
+	RooRealVar Btrk1dR("Btrk1dR","Btrk1dR",lowBtrk1dR,highBtrk1dR);
+	//RooRealVar Btrk2dR("Btrk2dR","Btrk2dR",lowBtrk2dR,highBtrk2dR);
+    
+    //define the RooArgSet of the Dataset
+	RooArgSet vars;
+		vars.add(Bmass);
+		//vars.add(Bnorm_svpvDistance);
+		//vars.add(Bnorm_svpvDistance_2D);
+		//vars.add(Balpha);
+		//vars.add(Bchi2cl);
+		//vars.add(BQvalueuj);
+		//vars.add(Btrk1dR);
+		//vars.add(Btrk2dR);
+    RooDataSet data("data", "data", vars,Import(*tree));
+
+	//signal of Bu
+	RooRealVar mean_Bu("mean_Bu","mean_Bu",5.28,5.26,5.30);
+	RooRealVar sigma1_Bu("sigma1_Bu","sigma1_Bu",0.02,1e-03,0.03);
+	RooGaussian Gaus1_Bu("Gaus1_Bu","Gaus1_Bu",Bmass,mean_Bu,sigma1_Bu);
+	RooRealVar sigma2_Bu("sigma2_Bu","sigma2_Bu",0.01,1e-04,0.015);
+	RooGaussian Gaus2_Bu("Gaus2_Bu","Gaus2_Bu",Bmass,mean_Bu,sigma2_Bu);
+	RooRealVar frac_Bu("frac_Bu","frac_Bu",0.5,0.2,0.8);
+	RooAddPdf sig_Bu("sig_Bu","sig_Bu",RooArgList(Gaus1_Bu,Gaus2_Bu),frac_Bu);
+
+	// Chebychev polynomial background
+	RooRealVar c1("c1", "coefficient #1", -0.5, -0.8, 0.2);
+	RooRealVar c2("c2", "coefficient #2", 0.1, -0.3, 0.3);
+	//RooRealVar c3("c3", "coefficient #3", 0.03, -0.3, 0.3);
+	// You can add more coefficients (c3, c4, ...) for higher-order polynomials
+
+	RooChebychev bkg("bkg", "Chebychev background", Bmass, RooArgList(c1, c2));
+
+	//normalization to get n_events
+	RooRealVar n_sig_Bu = RooRealVar("n_sig_Bu","n_sig_Bu",10000,0,N);
+	RooRealVar n_bkg = RooRealVar("n_bkg","n_bkg",50000,0,N);
+
+	RooExtendPdf sige_Bu("sige_Bu","sige_Bu",sig_Bu,n_sig_Bu);
+	RooExtendPdf bkge("bkge","bkge",bkg,n_bkg);
+	
+	//add them together
+	//RooAddPdf tot("total","total",RooArgList(sige_psi2s,sige_X,bkge),RooArgList(n_sig_psi2s,n_sig_Bu,n_bkg));
+	RooAddPdf tot("total","total",RooArgList(sige_Bu,bkge),RooArgList(n_sig_Bu,n_bkg));
+
+	//fit
+	//RooFitResult* result=tot.fitTo(data,Save(),Minimizer("Minuit2", "Migrad"),Eps(0.1));
+	
+	// run Minuit2 with a looser EDM tolerance, e.g. 0.1
+	RooAbsReal* nll = tot.createNLL(data, Extended(true));
+	RooMinimizer m(*nll);
+
+	m.setEps(100.0); //edm < 0.001*"setEps"; edm < 1 is OK for more than 100k events
+	m.setPrintLevel(1); 
+	gErrorIgnoreLevel = kInfo;
+
+	m.minimize("Minuit2","Migrad");
+	m.hesse();
+	RooFitResult* result = m.save();
+	result->Print("v"); 
+
+	// -------------------- Compute sWeights --------------------
+    cout << "\n>>> Computing sWeights..." << endl;
+    SPlot* sData = new SPlot("sData", "sWeights for Bu",
+                              data, &tot,
+                              RooArgList(n_sig_Bu, n_bkg));
+
+    cout << "sWeights computed." << endl;
+    cout << "Total entries in data: " << data.numEntries() << endl;
+    cout << "n_sig_Bu from sPlot: " << sData->GetYieldFromSWeight("n_sig_Bu") << endl;
+    cout << "n_bkg from sPlot: " << sData->GetYieldFromSWeight("n_bkg") << endl;
+
+    // -------------------- Save new ROOT file with sWeights --------------------
+    TFile *fout = new TFile("./sw_root/Bu/DATA_Bu_cut1_sw.root","RECREATE");
+    TTree* outtree = tree->CloneTree(0);
+	outtree->SetName("tree");
+	outtree->SetTitle("Tree with sWeights for Bu");
+
+    double w_Bu;
+    outtree->Branch("sWeight",&w_Bu,"sWeight/D");
+
+    for (int i=0;i<data.numEntries();i++){
+		tree->GetEntry(i);          
+    	w_Bu = sData->GetSWeight(i,"n_sig_Bu"); 
+    	outtree->Fill();
+    }
+	//Bnorm_svpvDistance_2D>4 && Btrk1dR <1.25
+
+    fout->cd();
+    outtree->Write();
+    fout->Close();
+
+    f->Close();
+
+	// ============================================================
+	// Drawing section with pull distribution and chi2/ndf
+	// ============================================================
+
+	TCanvas *c_Bmass = new TCanvas("c_Bmass","c_Bmass",10,10,800,700);
+
+	// 1) Main frame WITHOUT title (avoid default "A RooPlot of ...")
+	RooPlot *frame_Bmass = Bmass.frame(Bins(BinNum));
+	frame_Bmass->SetTitle(""); // remove default title
+
+	//define colors
+	int brightAzure = TColor::GetColor(51, 153, 255);
+	int green  = TColor::GetColor(0,   128,   0); 
+	int pink   = TColor::GetColor(255, 105, 180); 
+	int purple = TColor::GetColor(128,   0, 128); 
+	int yellow = TColor::GetColor(255, 255,   0); 
+	int orange = TColor::GetColor(255, 165,   0); 
+
+
+	// Plot data and model (name them so pull can find them)
+	data.plotOn(frame_Bmass,DataError(RooAbsData::SumW2),Name("data"));
+	// Make main data markers smaller and error bars thinner
+	if (auto hDataMain = dynamic_cast<RooHist*>(frame_Bmass->findObject("data"))) {
+		hDataMain->SetMarkerStyle(20); // solid dot
+		hDataMain->SetMarkerSize(0.5); // smaller points
+		hDataMain->SetLineWidth(1);    // thinner error bars
+	}
+	tot.plotOn(frame_Bmass, LineColor(kBlue), LineStyle(1), Name("all"));
+	tot.plotOn(frame_Bmass, Components(sig_Bu),     LineColor(pink),  LineStyle(2), Name("sig_Bu"));
+	tot.plotOn(frame_Bmass, Components(bkg),       LineColor(brightAzure),LineStyle(1), Name("bkg"));
+
+
+	// Override Y-axis label with fixed bin width (avoid 0.000999999 formatting)
+	frame_Bmass->GetYaxis()->SetTitle("Events / (0.001)");
+
+	// 2) Pull frame WITHOUT title
+	RooHist* hpull = frame_Bmass->pullHist("data", "all"); // (data - pdf)/sigma per bin
+	RooPlot* frame_pull = Bmass.frame();
+	frame_pull->SetTitle(""); // remove default title
+	frame_pull->addPlotable(hpull, "P");
+	// --- Make pull points thinner/smaller ---
+	hpull->SetMarkerStyle(20);
+	hpull->SetMarkerSize(0.5);  // smaller
+	hpull->SetLineWidth(1);     // thinner vertical error bars
+
+	// --- Tighten y-range to [-3, 3] ---
+	frame_pull->SetMinimum(-3.0);
+	frame_pull->SetMaximum(+3.0);
+	frame_pull->SetYTitle("Pull");
+
+
+	// Axis formatting for the pull panel
+	frame_pull->GetYaxis()->SetTitleSize(0.10);
+	frame_pull->GetYaxis()->SetTitleOffset(0.45);
+	frame_pull->GetYaxis()->SetLabelSize(0.09);// Hide all y-axis numeric labels (we'll draw a single '0' ourselves)
+	frame_pull->GetXaxis()->SetTitle("m_{J/#psi#K^{+}}[GeV/c^{2}]");
+	frame_pull->GetXaxis()->SetTitleSize(0.12);
+	frame_pull->GetXaxis()->SetLabelSize(0.10);
+
+	// 3) Split canvas into two pads: top 80%, bottom 20%
+	c_Bmass->Divide(1,2,0,0);
+	TPad* p_top = (TPad*)c_Bmass->cd(1);
+	p_top->SetPad(0.0, 0.20, 1.0, 1.0);   // top 80%
+	p_top->SetTopMargin(0.10);            // move the plot slightly down
+	p_top->SetBottomMargin(0.02);
+	p_top->SetLeftMargin(0.12);
+	p_top->SetRightMargin(0.04);
+
+	// ---------------- Legend and TPaveText CREATED BEFORE DRAW ----------------
+	// Compute data-space coordinates for legend/pave (inside plot box)
+	double x0 = lowBmass + 0.60*(highBmass - lowBmass);
+	double x1 = lowBmass + 0.72*(highBmass - lowBmass);
+	double x2 = lowBmass + 1.00*(highBmass - lowBmass);
+	double y0 = 0.80*frame_Bmass->GetMaximum();
+	double y1 = 0.60*frame_Bmass->GetMaximum();
+	double y2 = 1.00*frame_Bmass->GetMaximum();
+
+	// Legend: compact, inside plot box
+	TLegend leg1(x0, y0, x1, y2, "", "br");
+	leg1.SetTextSize(0.018);
+	leg1.SetBorderSize(1);
+	leg1.SetFillStyle(0);
+	leg1.AddEntry(frame_Bmass->findObject("data"),       "data",               "PE");
+	leg1.AddEntry(frame_Bmass->findObject("all"),        "total fit",          "L");
+	leg1.AddEntry(frame_Bmass->findObject("sig_Bu"),      "signal Bu",     "L");
+	leg1.AddEntry(frame_Bmass->findObject("bkg"),        "background",         "L");
+
+	// PaveText with fit parameters (attach to frame BEFORE drawing)
+	TPaveText *pave = new TPaveText(x1, y1, x2, y2, "BR");
+	pave->SetFillColor(0);
+	pave->SetFillStyle(0);
+	pave->SetBorderSize(1);
+	pave->SetTextSize(0.02);
+	pave->SetTextAlign(12); // left alignment
+
+	if (result) {
+		RooArgList finalPars = result->floatParsFinal();
+		for (int i = 0; i < finalPars.getSize(); i++) {
+			RooRealVar* var = (RooRealVar*)&finalPars[i];
+			TString line = Form("%-10s = %.4g #pm %.2g",
+								var->GetName(), var->getVal(), var->getError());
+			pave->AddText(line);
+		}
+		// chi2/ndf (uses number of floating parameters)
+		const int nFloat = finalPars.getSize();
+		const double chi2ndf = frame_Bmass->chiSquare("all", "data", nFloat);
+		pave->AddText(Form("#chi^{2}/ndf = %.2f", chi2ndf));
+	} else {
+		pave->AddText("Fit result not available");
+	}
+
+	// IMPORTANT: attach pave BEFORE drawing the frame so it appears
+	frame_Bmass->addObject(pave);
+
+	// Now draw the top frame and legend
+	frame_Bmass->GetXaxis()->SetLabelSize(0);
+	frame_Bmass->GetXaxis()->SetTitleSize(0);
+	frame_Bmass->Draw();
+	leg1.DrawClone();
+
+	// ---------------- Draw the pull panel on the bottom pad ----------------
+	TPad* p_bot = (TPad*)c_Bmass->cd(2);
+	p_bot->SetPad(0.0, 0.0, 1.0, 0.20);   // bottom 20%
+	p_bot->SetTopMargin(0.02);
+	p_bot->SetBottomMargin(0.35);
+	p_bot->SetLeftMargin(0.12);
+	p_bot->SetRightMargin(0.04);
+
+	frame_pull->Draw();
+
+	// Add a horizontal reference line at y=0 on the pull panel
+	const double xmin = Bmass.getMin();
+	const double xmax = Bmass.getMax();
+	TLine* line0 = new TLine(xmin, 0.0, xmax, 0.0);
+	line0->SetLineStyle(2);
+	line0->Draw("same");
+
+	// Save with a filename that indicates pull is included
+	c_Bmass->SaveAs("./pdf/Bu/Bu_DATA_sw_v1.pdf");
+
+    f->Close();
+}

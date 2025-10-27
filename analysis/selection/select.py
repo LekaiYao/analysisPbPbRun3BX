@@ -46,7 +46,7 @@ def select(channel,input_file,output_file,cutName):
 if __name__ == "__main__":
     if len(sys.argv) != 4:
         print("Usage: python3 select.py <model> <cutNumber> <channel>")
-        print("model:0(sideband),1(cutDATA),2(cutMC)")
+        print("model:0(sideband),1(cutDATA),2(cutMC),3(Xonly)")
         print("cutNumber:n")
         print("channel:0(X),1(Bu),2(Bd),3(Bs),4(PSI2S)")
         print("Example: python3 select.py 0 0 1")
@@ -62,6 +62,9 @@ if __name__ == "__main__":
     elif model =="2":
         cutNumber = "cut" + sys.argv[2]
         cutName = "MC_cut" + sys.argv[2]
+    elif model =="3":
+        cutNumber = "cut" + sys.argv[2]
+        cutName = "only_cut" + sys.argv[2]
     
     channel = sys.argv[3]
 
@@ -75,6 +78,9 @@ if __name__ == "__main__":
     elif (model == "2") :#cutMC
         input = "MC"
         output = "MC"
+    elif (model == "3") :#X only
+        input = "DATA"
+        output = "DATA_only"
 
     if (channel == "0") :
         channel = "X"
@@ -85,7 +91,8 @@ if __name__ == "__main__":
     elif (channel == "3") :
         channel = "Bs"
     
-    input_file = f"root_files/{channel}/{input}_{channel}.root"
+    #input_file = f"root_files/{channel}/{input}_{channel}.root"
+    input_file = f"root_files/{channel}/{input}_{channel}_cut1.root"
     output_file = f"root_files/{channel}/{output}_{channel}_{cutNumber}.root"
 
     if (channel == "4") :#PSI2S

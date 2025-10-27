@@ -3,5 +3,5 @@ BQvalueuj/-0.2/0.2/0.001
 BtrkPtimb/0.0/1.0/0.001
 Btrk1dR/0.0/1.0/0.001
 Btrk2dR/0.0/1.0/0.001
-Bnorm_svpvDistance/0.0/10.0/0.01
-Bnorm_svpvDistance_2D/0.0/10.0/0.01
+Bnorm_svpvDistance/0.0/20.0/0.01
+Bnorm_svpvDistance_2D/0.0/20.0/0.01

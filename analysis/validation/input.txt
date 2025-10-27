@@ -25,4 +25,3 @@ Bnorm_trk1Dxy
 Bnorm_trk2Dxy
 Btrk1dR
 Btrk2dR
-Btktkmass

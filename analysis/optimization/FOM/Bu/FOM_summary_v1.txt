@@ -12,3 +12,17 @@ The best cut for Bnorm_svpvDistance is less than 0 FOM_max=0
 The range of Bnorm_svpvDistance is [ 0 , 10 ]
 The best cut for Bnorm_svpvDistance_2D is less than 0 FOM_max=0
 The range of Bnorm_svpvDistance_2D is [ 0 , 10 ]
+The best cut for Bcos_dtheta is greater than 0.499 FOM_max=1.10714
+The range of Bcos_dtheta is [ -1 , 0.5 ]
+The best cut for BQvalueuj is greater than -0.199 FOM_max=0.783599
+The range of BQvalueuj is [ -0.2 , 0.2 ]
+The best cut for BtrkPtimb is less than 0.001 FOM_max=9.54516
+The range of BtrkPtimb is [ 0 , 1 ]
+The best cut for Btrk1dR is less than 0.557 FOM_max=4.02653
+The range of Btrk1dR is [ 0 , 1 ]
+The best cut for Btrk2dR is less than 0.001 FOM_max=0.783599
+The range of Btrk2dR is [ 0 , 1 ]
+The best cut for Bnorm_svpvDistance is less than 10 FOM_max=1.04159
+The range of Bnorm_svpvDistance is [ 0 , 10 ]
+The best cut for Bnorm_svpvDistance_2D is greater than 10 FOM_max=1.96707
+The range of Bnorm_svpvDistance_2D is [ 0 , 10 ]

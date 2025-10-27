@@ -148,6 +148,12 @@ void plot_@VARNAME@(int mode = 0) {
     else if(mode==1){
         leg->AddEntry(h_mc,   "B^{+}",   "lf");
     }
+    else if(mode==2){
+        leg->AddEntry(h_mc,   "B^{0}",   "lf");
+    }
+    else if(mode==3){
+        leg->AddEntry(h_mc,   "B^{0}_{s}",   "lf");
+    }
     if(mode==0){
         leg->AddEntry(h_mc2,  "X(3872)",  "lf");
     }

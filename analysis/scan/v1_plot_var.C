@@ -9,6 +9,9 @@
 using namespace std;
 
 void plot_var(int mode) {
+    // --------- User-defined variable name ---------
+    TString varName = "Btrk1Dxy";  // Variable to inspect
+
     cout << "mode = " << mode << endl;
 
     if (mode == 0) {
@@ -16,9 +19,6 @@ void plot_var(int mode) {
     } else {
         cout << ">>> mode!=0 branch entered <<<" << endl;
     }
-
-    // --------- User-defined variable name ---------
-    TString varName = "B_mass";  // Variable to inspect
 
     // --------- Automatically determined variable range ---------
     double var_min = 1e10;
@@ -37,8 +37,8 @@ void plot_var(int mode) {
         f_mc2  = TFile::Open("../selection/root_files/MC_X3872.root");
     }
     else if(mode==1){
-        f_data = TFile::Open("../selection/root_files/sideband.root");
-        f_mc   = TFile::Open("../selection/root_files/MC_PSI2S.root");
+        f_data = TFile::Open("../validation/sw_root/X/DATA_X_cut0_sw.root");
+        f_mc   = TFile::Open("../selection/root_files/X/MC_X_cut1.root");
     }
 
     TTree *tree_data = (TTree*)f_data->Get("tree");
@@ -83,7 +83,7 @@ void plot_var(int mode) {
    
 
     // Fill histograms
-    tree_data->Draw(varName + ">>h_data", "", "goff");
+    tree_data->Draw(varName + ">>h_data", "sWeight", "goff");
     tree_mc->Draw(varName + ">>h_mc", "", "goff");
     if(mode==0){
         tree_mc2->Draw(varName + ">>h_mc2", "", "goff");
@@ -140,12 +140,12 @@ void plot_var(int mode) {
 
     // Add legend
     TLegend *leg = new TLegend(0.65, 0.70, 0.88, 0.88);
-    leg->AddEntry(h_data, "sideband", "lf");
+    leg->AddEntry(h_data, "X(3872) splot", "lf");
     if(mode==0){
         leg->AddEntry(h_mc,   "#Psi(2S)",   "lf");
     }
     else if(mode==1){
-        leg->AddEntry(h_mc,   "B^{+}",   "lf");
+        leg->AddEntry(h_mc,   "X(3872) MC",   "lf");
     }
     if(mode==0){
         leg->AddEntry(h_mc2,  "X(3872)",  "lf");
@@ -153,5 +153,5 @@ void plot_var(int mode) {
     leg->Draw();
 
     gSystem->Exec("mkdir -p output_scan");
-    c1->SaveAs("output_scan/"+varName + "_dist.pdf");
+    c1->SaveAs("pdf/X/"+varName + "_dist.pdf");
 }

@@ -12,4 +12,4 @@ For B mesons:
 
     for now, MC doesn't have signal mass window
 
-    cut0: B_chi2cl > 0.003 && B_Qvalueuj < 0.2
+    cut0: B_chi2cl > 0.003 && Bnorm_svpvDistance>2

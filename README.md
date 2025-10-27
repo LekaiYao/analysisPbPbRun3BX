@@ -1,7 +1,7 @@
-# analysis_X
+# analysisPbPbRun3BX
 
-This is used to analysis X(3872) in ppRef and PbPb. With MC and data ntuple samples after `Bfinder`, `analysis_X`
-could achieve the functions of `flatten`, `plot`, `correlation`, `select`, `optimization`, `BDT`, `fit`
+This is used to analysis X(3872) and Bu, Bd and B0 in ppRef and PbPb. With MC and data samples after `Bfinder`, 
+`analysisPbPbRun3BX` could achieve the functions of `flatten`, `scan`, `correlation`, `selection`, `optimization`, `BDT`, `yield`
 
 ---
 ## Project Structure & Description
@@ -45,6 +45,8 @@ could achieve the functions of `flatten`, `plot`, `correlation`, `select`, `opti
 The codes are based on root version `6.30.04` (at pauli). Some errors might take place when running BDT training at curie.
 
 ## How to Use the Project
+
+
 For the codes not introduced below, you could simply run them by `python3` to .py files, `root -l` to .C files.  
 When fit or selection is needed, you could go into the corresponding folder and find the codes you need.
 

@@ -14,6 +14,16 @@ scan(){
     popd
 }
 
+##wait to be improved
+validation(){
+    ##MC validation: SPlot, Sideband Subtraction(SBS)
+    #SPlot needs fit first, this part hasn't been merged
+    pushd analysis/validation
+    bash scan.sh 0 0 & #channel: 0(X),1(Bu),2(Bd),3(Bs); model: SPlot+SBS(0), SBS(1), SPlot(2)
+    wait
+    popd
+}
+
 ##merge finished
 correlation(){
     ##draw correlation matrix
@@ -64,6 +74,7 @@ yield(){
 #flatten
 
 #scan
+#validation
 #correlation
 #selection
 #optimization

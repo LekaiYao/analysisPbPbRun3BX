@@ -13,7 +13,7 @@
 #include <TMarker.h>
 
 // mode : 0(X+PSI),1(Bu),2(Bd),3(Bs),4(X)
-void optimization_@VAR@(int mode = 0) {
+void optimization_BQvalueuj(int mode = 0) {
     // scaling factors (background and signal)
     // wait to change
     Double_t fb = 0.329285, fs = 0.45116248;
@@ -56,13 +56,13 @@ void optimization_@VAR@(int mode = 0) {
     TCanvas *c1 = new TCanvas("c1", "Entry Scan", 900, 700);
     c1->SetGrid();
 
-    float min = @MIN@;
-    float max = @MAX@;
-    float step = @STEP@;
+    float min = -0.2;
+    float max = 0.2;
+    float step = 0.001;
     int n_points = int((max - min) / step) + 1;
     int nbin = int((max - min) / step) + 1;
 
-    TString var_name = "@VAR@";
+    TString var_name = "BQvalueuj";
 
     // l for "x < cut" (less-than), g for "x > cut" (greater-than)
     Double_t n_bkg_l = 0, n_sig_l = 0, FOM_l = 0;
