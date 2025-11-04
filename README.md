@@ -1,11 +1,16 @@
 # analysisPbPbRun3BX
 
 This is used to analysis X(3872) and Bu, Bd and B0 in ppRef and PbPb. With MC and data samples after `Bfinder`, 
-`analysisPbPbRun3BX` could achieve the functions of `flatten`, `scan`, `correlation`, `selection`, `optimization`, `BDT`, `yield`
+`analysisPbPbRun3BX` could achieve the functions of `flatten`, `scan`, `correlation`, `selection`, `optimization`, `BDT`, `yield`, `validation`
 
 ---
 ## Project Structure & Description
+`DOALL.sh` scipt controls all the codes inside `analysis` to perform specific functions.
+Whether to activate each functional module is determined by commenting or uncommenting the corresponding commands at the end of `DOALL.sh`. 
 
+-> However, this goal hasn't been fully realized. Some functions still need to work by hand.
+
+In `analysis`, the folders and files that have specific functions are listed below.  
 
 | File/Folder             | Description                                                  |
 |-------------------------|--------------------------------------------------------------|
@@ -37,15 +42,13 @@ This is used to analysis X(3872) and Bu, Bd and B0 in ppRef and PbPb. With MC an
 | `./TMVA/` | Train BDT, Check and Apply; Check part is being developed now |
 | `new_TMVA_BDTs.py,TMVA_BDTs.py` | train BDT, new one is modified for this project |
 | `apply_BDT.py` | apply the training result |
-| `*check*` | being developed |
 
 ---
 
 ## Environment
-The codes are based on root version `6.30.04` (at pauli). Some errors might take place when running BDT training at curie.
+The codes are based on ROOT version `6.30.04`. Some errors might take place when running BDT training with different ROOT version.
 
 ## How to Use the Project
-
 
 For the codes not introduced below, you could simply run them by `python3` to .py files, `root -l` to .C files.  
 When fit or selection is needed, you could go into the corresponding folder and find the codes you need.

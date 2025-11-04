@@ -10,9 +10,13 @@
 
 using namespace std;
 
-void plot_@VARNAME@(int channel = 0) {
-    TString varName = "@VARNAME@";
+void plot_all(int channel = 0) {
+    TString varName = "BsvpvDistance";
     TString massVar = "Bmass";
+    int nBins = 30;
+    //x_range
+    double var_min = 0.0;
+    double var_max = 0.3;
 
     double sig_low, sig_high, sb1_low, sb1_high, sb2_low, sb2_high, sb_low, sb_high;
     if(channel==0){
@@ -41,7 +45,6 @@ void plot_@VARNAME@(int channel = 0) {
         sb2_high = 5.70;
     }
 
-
     TFile *f_data = nullptr;
     TFile *f_splot = nullptr;
     TFile *f_mc   = nullptr;
@@ -64,9 +67,9 @@ void plot_@VARNAME@(int channel = 0) {
     TTree *tree_data = (TTree*)f_data->Get("tree");
     TTree *tree_mc   = (TTree*)f_mc->Get("tree");
 
-    double var_min = std::min(std::min(tree_data->GetMinimum(varName), tree_mc->GetMinimum(varName)), tree_splot->GetMinimum(varName));
-    double var_max = std::max(std::max(tree_data->GetMaximum(varName), tree_mc->GetMaximum(varName)), tree_splot->GetMaximum(varName));
-    int nBins = 100;
+    //x_range
+    //double var_min = std::min(std::min(tree_data->GetMinimum(varName), tree_mc->GetMinimum(varName)), tree_splot->GetMinimum(varName));
+    //double var_max = std::max(std::max(tree_data->GetMaximum(varName), tree_mc->GetMaximum(varName)), tree_splot->GetMaximum(varName));
 
     TH1F *h_splot = new TH1F("h_splot", "SPlot", nBins, var_min, var_max);
     TH1F *h_sig = new TH1F("h_sig", "Signal region", nBins, var_min, var_max);
@@ -75,6 +78,15 @@ void plot_@VARNAME@(int channel = 0) {
     TH1F *h_bkg = new TH1F("h_bkg", "Combined sidebands", nBins, var_min, var_max);
     TH1F *h_sbs = new TH1F("h_sbs", "Sideband-subtracted", nBins, var_min, var_max);
     TH1F *h_mc  = new TH1F("h_mc",  "MC", nBins, var_min, var_max);
+
+    // === Enable statistical error storage ===
+    h_splot->Sumw2();
+    h_sig->Sumw2();
+    h_sb1->Sumw2();
+    h_sb2->Sumw2();
+    h_bkg->Sumw2();
+    h_sbs->Sumw2();
+    h_mc->Sumw2();
 
     tree_splot->Draw(varName + ">>h_splot", "sWeight", "goff");
 
@@ -128,7 +140,7 @@ void plot_@VARNAME@(int channel = 0) {
     int lightBrightYellow = TColor::GetColor(255, 235, 0);
     h_splot->SetLineColor(lightBrightYellow);
     h_splot->SetLineWidth(2);
-    h_splot->SetFillColorAlpha(lightBrightYellow, 0.3);// semi-transparent yellow
+    h_splot->SetFillColorAlpha(lightBrightYellow, 0.3);
     h_splot->SetFillStyle(1001);
 
     float max_val = std::max(std::max(h_sbs->GetMaximum(), h_mc->GetMaximum()), h_splot->GetMaximum());
@@ -136,26 +148,28 @@ void plot_@VARNAME@(int channel = 0) {
 
     gStyle->SetOptStat(0);
     TCanvas *c1 = new TCanvas("c1", "Sideband Subtraction", 800, 600);
-    h_sbs->SetTitle("Sideband-subtracted " + varName + "; " + varName + "; Normalized entries");
+    h_sbs->SetTitle(varName + " distribution" + "; " + varName + "; Normalized entries");
+
+    // === Draw filled histograms with error bars overlaid ===
     h_sbs->Draw("hist");
+    h_sbs->Draw("E1 same");
     h_mc->Draw("hist same");
+    h_mc->Draw("E1 same");
     h_splot->Draw("hist same");
+    h_splot->Draw("E1 same");
 
     TLegend *leg = new TLegend(0.65, 0.70, 0.88, 0.88);
     if(channel==0){
-        //X
         leg->AddEntry(h_sbs, "X(3872) SBS", "lf");
         leg->AddEntry(h_mc,  "X(3872) MC", "lf");
         leg->AddEntry(h_splot, "X(3872) SPlot", "lf");
     }
     else if(channel==1){
-        //Bu
         leg->AddEntry(h_sbs, "Bu SBS", "lf");
         leg->AddEntry(h_mc,  "Bu MC", "lf");
         leg->AddEntry(h_splot, "Bu SPlot", "lf");
     }
     else if(channel==3){
-        //Bs
         leg->AddEntry(h_sbs, "Bs SBS", "lf");
         leg->AddEntry(h_mc,  "Bs MC", "lf");
         leg->AddEntry(h_splot, "Bs SPlot", "lf");
@@ -163,18 +177,15 @@ void plot_@VARNAME@(int channel = 0) {
     leg->Draw();
 
     if(channel==0){
-        //X
-        gSystem->Exec("mkdir -p all_output/X/");
-        c1->SaveAs("all_output/X/" + varName + "_dist.pdf");
+        gSystem->Exec("mkdir -p plot_all_var/X/");
+        c1->SaveAs("plot_all_var/X/" + varName + "_dist.pdf");
     }
     else if(channel==1){
-        //Bu
-        gSystem->Exec("mkdir -p all_output/Bu/");
-        c1->SaveAs("all_output/Bu/" + varName + "_dist.pdf");
+        gSystem->Exec("mkdir -p plot_all_var/Bu/");
+        c1->SaveAs("plot_all_var/Bu/" + varName + "_dist.pdf");
     }
     else if(channel==3){
-        //Bs
-        gSystem->Exec("mkdir -p all_output/Bs/");
-        c1->SaveAs("all_output/Bs/" + varName + "_dist.pdf");
+        gSystem->Exec("mkdir -p plot_all_var/Bs/");
+        c1->SaveAs("plot_all_var/Bs/" + varName + "_dist.pdf");
     }
 }

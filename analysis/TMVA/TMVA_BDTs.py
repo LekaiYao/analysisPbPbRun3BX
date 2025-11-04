@@ -5,7 +5,7 @@ import sys
 
 # Get the input argument from the command line
 if len(sys.argv) != 3:
-    print("Usage: python3 correlation.py <trainNumber> <channel>")
+    print("Usage: python3 TMVA_BDTs.py <trainNumber> <channel>")
     print("trainNumber:test1,train2,...")
     print("channel:0(X),1(Bu),2(Bd),3(Bs)")
     sys.exit(1)
@@ -55,8 +55,8 @@ os.makedirs("dataset/"+channel+"/dataset_" + trainNumber + "/plots",exist_ok=Tru
 outfname='dataset/'+channel+'/dataset_' + trainNumber + '/results/rootfiles/TMVA_BDT.root' 
 output = TFile.Open(outfname, 'RECREATE')
 
-cuts="Bchi2cl>0.003" # MC
-cutb="Bchi2cl>0.003" # data
+cuts="(Bchi2cl>0.003 && BQvalueuj <= 0.2)&&(Bmass > 3.83 && Bmass < 3.91)" # MC
+cutb="(Bchi2cl>0.003 && BQvalueuj <= 0.2)&&((Bmass < 3.83 && Bmass > 3.75)||(Bmass > 3.91&&Bmass < 4.0))" # data
 
 mycutS=TCut(cuts)
 mycutB=TCut(cutb)
@@ -68,11 +68,14 @@ dataloader = TMVA.DataLoader('dataset/'+channel+'/dataset_' + trainNumber)
 
 # features to train the BDT (keep as your original)
 dataloader.AddVariable("Btrk1dR")
-#dataloader.AddVariable("Bchi2cl")
+dataloader.AddVariable("Btrk1Pt")
+dataloader.AddVariable("Btrk2dR")
+dataloader.AddVariable("Btrk2Pt")
+dataloader.AddVariable("Bchi2cl")
 #dataloader.AddVariable("Bcos_dtheta")
 #dataloader.AddVariable("Bnorm_trk1Dxy")
 #dataloader.AddVariable("Bnorm_svpvDistance")
-dataloader.AddVariable("BQvalueuj")
+#dataloader.AddVariable("BQvalueuj")
 
 
 # NEW: add mass as spectator to monitor mass sculpting
