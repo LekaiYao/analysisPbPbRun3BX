@@ -18,20 +18,20 @@ void draw_cut() {
 
     // ---------------- Open file and get tree ----------------
     //TFile *f = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/selection/root_files/DATA_XPSI.root");
-    TFile *f = TFile::Open("/user/l/lekai/work/ppRef/analysis_X/TMVA/DATA_XPSI_BDT_trainX4.root");
+    TFile *f = TFile::Open("../selection/root_files/X/BDT/DATA_X_BDT_test4.root");
     if (!f || f->IsZombie()) { ::Error("draw_cut","Cannot open input ROOT file."); return; }
     TTree *tree = (TTree*)f->Get("tree");
     if (!tree) { ::Error("draw_cut","Cannot find TTree 'tree' in the file."); return; }
 
     // ---------------- User cut and histogram ----------------
     //TString cut = "B_chi2cl > 0.003 && B_Qvalueuj < 0.2 && B_Qvalueuj < 0.095 && B_trk1dR<0.639 && B_trk2dR<0.64";
-    TString cut = "BDT_score > -0.000999987";
-    const int nBins = 160;
-    const double xMin = 3.6, xMax = 4.0;
+    TString cut = "BDT_score > 0.054";
+    const int nBins = 50;
+    const double xMin = 3.75, xMax = 4.0;
     TH1F *h_Bmass = new TH1F("h_Bmass", "", nBins, xMin, xMax); // empty title to avoid top title
 
     // ---------------- Canvas before drawing (so stats box belongs to this pad) ----------------
-    TCanvas *c1 = new TCanvas("c1","B_mass distribution",800,600);
+    TCanvas *c1 = new TCanvas("c1","Bmass distribution",800,600);
     c1->SetLeftMargin(0.10);   // keep your margins; adjust if y-title needs more room
     c1->SetRightMargin(0.06);
     c1->SetTopMargin(0.06);
@@ -39,7 +39,7 @@ void draw_cut() {
 
     // ---------------- Fill histogram (Tree::Draw projection) ----------------
     // Use "goff" to avoid implicit drawing by TTree::Draw
-    tree->Draw("B_mass >> h_Bmass", cut, "goff");
+    tree->Draw("Bmass >> h_Bmass", cut, "goff");
 
     // ---------------- Axis titles and text sizes ----------------
     h_Bmass->GetXaxis()->SetTitle("m_{J/#Psi#pi+#pi-} [GeV/c^{2}]");

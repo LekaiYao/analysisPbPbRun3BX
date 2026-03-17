@@ -38,3 +38,9 @@ The best cut for Bnorm_svpvDistance is less than 1.92 FOM_max=31.2337
 The range of Bnorm_svpvDistance is [ 0 , 10 ]
 The best cut for Bnorm_svpvDistance_2D is less than 1.03 FOM_max=11.2823
 The range of Bnorm_svpvDistance_2D is [ 0 , 10 ]
+The best cut for BDT_score is less than -0.2 FOM_max=0
+The range of BDT_score is [ -0.2 , 0.2 ]
+The best cut for BDT_score is less than -0.2 FOM_max=0
+The range of BDT_score is [ -0.2 , 0.2 ]
+The best cut for BDT_score is less than -0.2 FOM_max=0
+The range of BDT_score is [ -0.2 , 0.2 ]

@@ -3,12 +3,14 @@ from ROOT import TMVA, TFile, TTree, gSystem
 from array import array
 import sys
 import os
+from cuts_config import cuts, cutb
+from ROOT import TCut, TTreeFormula
 
 ROOT.gROOT.SetBatch(True)
 
 # Get the input argument from the command line
 if len(sys.argv) != 3:
-    print("Usage: python3 correlation.py <trainNumber> <channel>")
+    print("Usage: python3 apply_BDT.py <trainNumber> <channel>")
     print("trainNumber:test1,train2,...")
     print("channel:0(X),1(Bu),2(Bd),3(Bs)")
     sys.exit(1)
@@ -40,9 +42,9 @@ gSystem.RedirectOutput(log_path, "w")
 # List of datasets (input_file, output_file)
 # Comment out the ones you do not want to run
 datasets = [
-    (f"../selection/root_files/{channel}/sideband_{channel}.root",   f"{output_dir}/sideband_{channel}_BDT_{trainNumber}.root"),
-    (f"../selection/root_files/{channel}/MC_{channel}.root",  f"{output_dir}/MC_{channel}_BDT_{trainNumber}.root"),
-    (f"../selection/root_files/{channel}/DATA_{channel}_cut0.root", f"{output_dir}/DATA_{channel}_BDT_{trainNumber}.root"),
+    (f"../selection/root_files/{channel}/sideband_{channel}_cut1.root",   f"{output_dir}/sideband_{channel}_BDT_{trainNumber}.root"),
+    (f"../selection/root_files/{channel}/MC_{channel}_cut1.root",  f"{output_dir}/MC_{channel}_BDT_{trainNumber}.root"),
+    (f"../selection/root_files/{channel}/DATA_{channel}_cut2.root", f"{output_dir}/DATA_{channel}_BDT_{trainNumber}.root"),
 ]
 
 # -----------------------------
@@ -57,26 +59,30 @@ reader = TMVA.Reader("!Color:!Silent")
 # Define input variables (must match training!)
 # -----------------------------
 Btrk1dR = array('f', [0.])
-BQvalueuj = array('f', [0.])
+Btrk1Pt = array('f', [0.])
+Btrk2dR = array('f', [0.])
+Btrk2Pt = array('f', [0.])
+#BQvalueuj = array('f', [0.])
 #Bchi2cl = array('f', [0.])
-#Bcos_dtheta = array('f', [0.])
+Bcos_dtheta = array('f', [0.])
 #Bnorm_trk1Dxy = array('f', [0.])
 #Bnorm_svpvDistance = array('f', [0.])
 
-#Bchi2cl = array('f', [0.])
 #Bnorm_trk1Dxy = array('f', [0.])
 #Bnorm_svpvDistance = array('f', [0.])
 
 Bmass = array('f', [0.])
 
 reader.AddVariable("Btrk1dR",Btrk1dR)
-reader.AddVariable("BQvalueuj",BQvalueuj)
+reader.AddVariable("Btrk1Pt",Btrk1Pt)
+reader.AddVariable("Btrk2dR",Btrk2dR)
+reader.AddVariable("Btrk2Pt",Btrk2Pt)
+#reader.AddVariable("BQvalueuj",BQvalueuj)
 #reader.AddVariable("Bchi2cl",Bchi2cl)
-#reader.AddVariable("Bcos_dtheta",Bcos_dtheta)
+reader.AddVariable("Bcos_dtheta",Bcos_dtheta)
 #reader.AddVariable("Bnorm_trk1Dxy",Bnorm_trk1Dxy)
 #reader.AddVariable("Bnorm_svpvDistance",Bnorm_svpvDistance)
 #reader.AddVariable("Balpha", Balpha)
-#reader.AddVariable("Bchi2cl",Bchi2cl)
 #reader.AddVariable("Bnorm_trk1Dxy",Bnorm_trk1Dxy)
 #reader.AddVariable("Bnorm_svpvDistance",Bnorm_svpvDistance)
 
@@ -120,21 +126,20 @@ for input_file, output_file in datasets:
 
         # Assign input variable values
         Btrk1dR[0] = getattr(tree, "Btrk1dR")
-        BQvalueuj[0] = getattr(tree, "BQvalueuj")
+        Btrk1Pt[0] = getattr(tree, "Btrk1Pt")
+        Btrk2dR[0] = getattr(tree, "Btrk2dR")
+        Btrk2Pt[0] = getattr(tree, "Btrk2Pt")
+        #BQvalueuj[0] = getattr(tree, "BQvalueuj")
         #Bchi2cl[0] = getattr(tree, "Bchi2cl")
-        #Bcos_dtheta[0] = getattr(tree, "Bcos_dtheta")
+        Bcos_dtheta[0] = getattr(tree, "Bcos_dtheta")
         #Bnorm_trk1Dxy[0] = getattr(tree, "Bnorm_trk1Dxy")
         #Bnorm_svpvDistance[0] = getattr(tree, "Bnorm_svpvDistance")
 
-        #Bchi2cl[0] = getattr(tree, "Bchi2cl")
         #Bnorm_trk1Dxy[0] = getattr(tree, "Bnorm_trk1Dxy")
         #Bnorm_svpvDistance[0] = getattr(tree, "Bnorm_svpvDistance")
 
         # Evaluate BDT
         bdt_score[0] = reader.EvaluateMVA("BDT")
-
-        # Get Bmass
-        Bmass[0] = getattr(tree, "Bmass")
 
         # Fill output tree
         output_tree.Fill()
@@ -145,6 +150,6 @@ for input_file, output_file in datasets:
     output_root.cd()
     output_tree.Write("", ROOT.TObject.kOverwrite)
     output_root.Close()
-    gSystem.RedirectOutput(0)
+    gSystem.RedirectOutput("")
 
     print(f"Output ROOT file saved: {output_file}")

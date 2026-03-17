@@ -13,10 +13,10 @@
 #include <TMarker.h>
 
 // mode : 0(X+PSI),1(Bu),2(Bd),3(Bs),4(X)
-void optimization_BQvalueuj(int mode = 0) {
+void optimization_var(int mode = 0) {
     // scaling factors (background and signal)
     // wait to change
-    Double_t fb = 0.329285, fs = 0.45116248;
+    Double_t fb = 0.677333, fs = 0.85248561;
     //input files
     TFile *f_bkg = nullptr;
     TFile *f_sig   = nullptr;
@@ -40,8 +40,10 @@ void optimization_BQvalueuj(int mode = 0) {
         f_sig   = TFile::Open("../selection/root_files/Bs/MC_Bs_cut0.root");
     }
     else if (mode==4) {
-        f_bkg = TFile::Open("../selection/root_files/X/sideband_X_cut0.root");
-        f_sig   = TFile::Open("../selection/root_files/X/MC_X_cut0.root");
+        //f_bkg = TFile::Open("../selection/root_files/X/sideband_X_cut0.root");
+        //f_sig   = TFile::Open("../selection/root_files/X/MC_X_cut0.root");
+        f_bkg = TFile::Open("../selection/root_files/X/BDT/sideband_X_BDT_test4.root");
+        f_sig   = TFile::Open("../selection/root_files/X/BDT/MC_X_BDT_test4.root");
     }
 
     TTree *tree_bkg = (TTree*)f_bkg->Get("tree");
@@ -62,7 +64,8 @@ void optimization_BQvalueuj(int mode = 0) {
     int n_points = int((max - min) / step) + 1;
     int nbin = int((max - min) / step) + 1;
 
-    TString var_name = "BQvalueuj";
+    // The variable to optimize
+    TString var_name = "BDT_score";
 
     // l for "x < cut" (less-than), g for "x > cut" (greater-than)
     Double_t n_bkg_l = 0, n_sig_l = 0, FOM_l = 0;

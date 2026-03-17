@@ -6,6 +6,9 @@ cuts = {
     "X_sideband_cut0": [
         "((tree.Bmass > 3.6) and (tree.Bmass < 3.66)) or ((tree.Bmass > 3.72) and (tree.Bmass < 3.83)) or ((tree.Bmass > 3.91) and (tree.Bmass < 4.0))",
     ],
+    "X_sideband_cut1": [
+        "(tree.Bchi2cl > 0.003 and tree.BQvalueuj <= 0.95) and ((tree.Bmass > 3.75) and (tree.Bmass < 3.83)) or ((tree.Bmass > 3.91) and (tree.Bmass < 4.0))",
+    ],
     "Bu_sideband_cut0": [
         "((tree.Bmass > 5.0) and (tree.Bmass < 5.2)) or ((tree.Bmass > 5.4) and (tree.Bmass < 6.0))",
     ],
